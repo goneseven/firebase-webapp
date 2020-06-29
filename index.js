@@ -24,9 +24,18 @@ var rsvpListener = null;
 var guestbookListener = null;
 
 // Add Firebase project configuration object here
-// var firebaseConfig = {};
+var firebaseConfig = {
+  apiKey: "AIzaSyBkdA73wVx0w6wreVvo4m5fupU-LZkHUfA",
+  authDomain: "fir-webapp-c2246.firebaseapp.com",
+  databaseURL: "https://fir-webapp-c2246.firebaseio.com",
+  projectId: "fir-webapp-c2246",
+  storageBucket: "fir-webapp-c2246.appspot.com",
+  messagingSenderId: "467780724852",
+  appId: "1:467780724852:web:6d7bade75374b1a15f0921",
+  measurementId: "G-XWGWZHB471"
+};
 
-// firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 // FirebaseUI config
 const uiConfig = {
@@ -44,4 +53,25 @@ const uiConfig = {
   }
 };
 
-// const ui = new firebaseui.auth.AuthUI(firebase.auth());
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+// Listen to RSVP button clicks
+startRsvpButton.addEventListener("click",
+ () => {
+    if (firebase.auth().currentUser) {
+      // User is signed in; allows user to sign out
+      firebase.auth().signOut();
+    } else {
+      // No user is signed in; allows user to sign in
+      ui.start("#firebaseui-auth-container", uiConfig);
+    }
+});
+
+firebase.auth().onAuthStateChanged((user)=> {
+  if (user) {
+    startRsvpButton.textContent = "LOGOUT"
+  }
+  else {
+    startRsvpButton.textContent = "RSVP"
+  }
+});
